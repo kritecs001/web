@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Лабораторная работа №1. Вариант 4</title>
+
+    <link href="style.css" rel="stylesheet" type="text/css">
+
+    <style>
+        #priority-demo {
+            color: red;
+            font-weight: bold;
+        }
+
+        .cascade-note {
+            font-style: italic;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>LAB1 HTML и CSS</h1>
+    <nav>
+        <a href="#form-section">Перейти к форме</a> |
+        <a href="page2.html">Перейти на другую страницу</a>
+    </nav>
+</header>
+
+<hr>
+
+<main>
+
+    <!-- Пункт 1. Демонстрация блочных и строчных тегов -->
+    <section>
+        <h2>Блочные и строчные элементы</h2>
+        <p>
+            Ниже показана разница между блочным тегом <code>&lt;div&gt;</code>
+            и строчным тегом <code>&lt;span&gt;</code>.
+        </p>
+
+        <div class="block-demo">Это блочный элемент div — он занимает всю ширину строки.</div>
+        <div class="block-demo">Второй div начинается с новой строки.</div>
+
+        <p>
+            А вот строчные элементы:
+            <span class="inline-demo">span один</span>
+            <span class="inline-demo">span два</span>
+            находятся в одной строке друг за другом.<br>
+            Тег &lt;br&gt; выполняет принудительный перенос строки.
+        </p>
+    </section>
+
+    <hr>
+
+    <!-- Пункт 2. Изображение -->
+    <section>
+        <h2>Изображение с подписью</h2>
+        <figure>
+            <img src="image.jpeg" alt="Иллюстрация HTML и CSS" width="300">
+            <figcaption>Рис. 1. Иллюстрация к теме HTML и CSS</figcaption>
+        </figure>
+    </section>
+
+    <hr>
+
+    <!-- Пункт 3. Дополнительные теги -->
+    <section id="extra-tags">
+        <h2>Дополнительные теги</h2>
+
+        <p>Текст с <mark>выделенным фрагментом</mark> и отметкой времени:
+            <time datetime="2026-09-09">9 сентября 2026 года</time>.</p>
+
+        <details>
+            <summary>Нажмите, чтобы раскрыть подробности</summary>
+            <p>Это скрытый текст, который появляется при раскрытии блока
+                <code>&lt;details&gt;</code>.</p>
+        </details>
+
+        <pre>
+function hello() {
+    console.log("Пример текста внутри тега pre");
+}
+        </pre>
+    </section>
+
+    <hr>
+
+    <!-- Пункт 4. Нумерованный список -->
+    <section>
+        <h2>Нумерованный список (римские цифры, начиная с «c»)</h2>
+        <ol type="i" start="100">
+            <li>Изучение HTML</li>
+            <li>Изучение CSS</li>
+            <li>Изучение JavaScript</li>
+            <li>Работа с сервером</li>
+        </ol>
+    </section>
+
+    <hr>
+
+    <!-- Пункт 5. Таблица 3x3 с объединением ячеек -->
+    <section>
+        <h2>Таблица 3×3 с объединением ячеек</h2>
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr>
+                <td colspan="2">Объединено по горизонтали (1-2 столбец)</td>
+                <td rowspan="2">Объединено по вертикали (1-2 строка)</td>
+            </tr>
+            <tr>
+                <td>Ячейка 2,1</td>
+                <td>Ячейка 2,2</td>
+            </tr>
+            <tr>
+                <td>Ячейка 3,1</td>
+                <td>Ячейка 3,2</td>
+                <td>Ячейка 3,3</td>
+            </tr>
+        </table>
+    </section>
+
+    <hr>
+
+    <!-- Пункт 6. Приоритеты CSS -->
+    <section>
+        <h2>Демонстрация приоритетов CSS</h2>
+        <p class="cascade-note">
+            Один и тот же элемент оформлен тремя способами: во внешнем файле
+            (зелёный), внутри тега &lt;style&gt; (красный) и с помощью атрибута
+            style (синий — победит, так как имеет наивысший приоритет).
+        </p>
+        <p id="priority-demo" style="color: blue;">
+            Этот текст должен быть синим — атрибут style побеждает всё остальное.
+        </p>
+    </section>
+
+    <hr>
+
+    <!-- Пункт 7. Форма -->
+    <section id="form-section">
+        <h2>Форма варианта 4</h2>
+        <form action="#" method="post">
+            <fieldset>
+                <legend>Что вы изучаете?</legend>
+                <label><input type="checkbox" name="tech" value="HTML"> HTML</label><br>
+                <label><input type="checkbox" name="tech" value="CSS" checked> CSS</label><br>
+                <label><input type="checkbox" name="tech" value="JavaScript" checked> JavaScript</label>
+            </fieldset>
+
+            <p>
+                <label for="email">E-mail:</label><br>
+                <input type="email" id="email" name="email" placeholder="ilya.email@gmail.com">
+            </p>
+
+            <p>
+                <button type="submit">Отправить</button>
+                <button type="reset">Сбросить</button>
+            </p>
+        </form>
+    </section>
+
+    <hr>
+
+    <!-- Пункт 8. Изображение, созданное только средствами CSS -->
+    <section>
+        <h2>Простое изображение средствами CSS</h2>
+        <div class="css-smiley">
+            <div class="eye left"></div>
+            <div class="eye right"></div>
+            <div class="mouth"></div>
+        </div>
+    </section>
+
+</main>
+
+<hr>
+
+<footer>
+    <p>&copy; 2026. Лабораторная работа №1 по дисциплине «Web-программирование».Гребенщиков И.А. АВТ-343</p>
+</footer>
+
+</body>
+</html>

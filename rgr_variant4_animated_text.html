@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>РГР. Гребенщиков АВТ-343</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f6f9;
+        margin: 0;
+        padding: 30px;
+        color: #222;
+    }
+    h1 {
+        font-size: 22px;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    .wrapper {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        padding: 30px 40px;
+    }
+    .controls {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px 25px;
+        margin-bottom: 25px;
+    }
+    .control-item {
+        display: flex;
+        flex-direction: column;
+        font-size: 14px;
+    }
+    .control-item label {
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #444;
+    }
+    input[type="text"], input[type="number"], input[type="color"] {
+        padding: 6px 8px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 14px;
+    }
+    .buttons {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+    button {
+        background: #3b6fe0;
+        color: #fff;
+        border: none;
+        padding: 10px 22px;
+        margin: 0 6px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.2s;
+    }
+    button:hover {
+        background: #2d59bd;
+    }
+    button:disabled {
+        background: #a9b7d4;
+        cursor: not-allowed;
+    }
+    #displayArea {
+        min-height: 80px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        border: 2px dashed #ccd4e0;
+        border-radius: 8px;
+        padding: 20px;
+        background: #fafbfd;
+    }
+    #displayArea span {
+        display: inline-block;
+        transition: color 0.15s ease, font-size 0.15s ease;
+        white-space: pre;
+    }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+    <h1>Расчётно-графическое задание. Вариант 4<br>Эффект анимированного текста</h1>
+
+    <div class="controls">
+        <div class="control-item">
+            <label for="inputText">Текст для анимации:</label>
+            <input type="text" id="inputText" value="Введите текст">
+        </div>
+        <div class="control-item">
+            <label for="speed">Скорость (мс на символ):</label>
+            <input type="number" id="speed" value="150" min="30" max="2000">
+        </div>
+        <div class="control-item">
+            <label for="mainColor">Основной цвет символов:</label>
+            <input type="color" id="mainColor" value="#222222">
+        </div>
+        <div class="control-item">
+            <label for="extraColor">Дополнительный цвет (выделяемый символ):</label>
+            <input type="color" id="extraColor" value="#e0233b">
+        </div>
+        <div class="control-item">
+            <label for="mainSize">Основной размер (px):</label>
+            <input type="number" id="mainSize" value="22" min="8" max="150">
+        </div>
+        <div class="control-item">
+            <label for="extraSize">Дополнительный размер (px):</label>
+            <input type="number" id="extraSize" value="42" min="8" max="200">
+        </div>
+    </div>
+
+    <div class="buttons">
+        <button id="applyBtn">Применить текст</button>
+        <button id="startBtn">Старт</button>
+        <button id="stopBtn" disabled>Стоп</button>
+    </div>
+
+    <div id="displayArea"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+$(function () {
+
+    var timerId = null;      // идентификатор setInterval
+    var currentIndex = -1;   // индекс текущего выделенного символа
+    var $spans = null;       // коллекция jQuery-объектов символов
+
+    // разбивка введённого текста на отдельные span'ы внутри #displayArea
+    function buildSpans() {
+        var text = $('#inputText').val();
+        var $display = $('#displayArea');
+        $display.empty();
+
+        // посимвольное построение разметки
+        $.each(text.split(''), function (i, ch) {
+            var content = (ch === ' ') ? '\u00A0' : ch;
+            var $span = $('<span>').text(content);
+            $display.append($span);
+        });
+
+        applyMainStyleToAll();
+        $spans = $display.children('span');
+        currentIndex = -1;
+    }
+
+    // Возврат всем символам основной стиль
+    function applyMainStyleToAll() {
+        var mainColor = $('#mainColor').val();
+        var mainSize = $('#mainSize').val() + 'px';
+        $('#displayArea span').css({
+            'color': mainColor,
+            'font-size': mainSize
+        });
+    }
+
+    function animationStep() {
+        if (!$spans || $spans.length === 0) return;
+
+        var mainColor = $('#mainColor').val();
+        var mainSize = $('#mainSize').val() + 'px';
+        var extraColor = $('#extraColor').val();
+        var extraSize = $('#extraSize').val() + 'px';
+
+        if (currentIndex >= 0) {
+            $spans.eq(currentIndex).css({
+                'color': mainColor,
+                'font-size': mainSize
+            });
+        }
+
+        currentIndex = (currentIndex + 1) % $spans.length;
+
+        $spans.eq(currentIndex).css({
+            'color': extraColor,
+            'font-size': extraSize
+        });
+    }
+
+    $('#applyBtn').on('click', function () {
+        stopAnimation();
+        buildSpans();
+    });
+
+    $('#startBtn').on('click', function () {
+        if ($('#displayArea span').length === 0) {
+            buildSpans();
+        }
+        startAnimation();
+    });
+
+    $('#stopBtn').on('click', function () {
+        stopAnimation();
+    });
+
+    function startAnimation() {
+        if (timerId !== null) return;
+        var speed = parseInt($('#speed').val(), 10) || 150;
+        timerId = setInterval(animationStep, speed);
+        $('#startBtn').prop('disabled', true);
+        $('#stopBtn').prop('disabled', false);
+    }
+
+    function stopAnimation() {
+        if (timerId !== null) {
+            clearInterval(timerId);
+            timerId = null;
+        }
+        $('#startBtn').prop('disabled', false);
+        $('#stopBtn').prop('disabled', true);
+    }
+
+    buildSpans();
+});
+</script>
+
+</body>
+</html>
